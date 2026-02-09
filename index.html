@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Potito 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      max-width: 90%;
+    }
+
+    h1 {
+      color: #e6005c;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .buttons {
+      margin-top: 20px;
+      position: relative;
+      height: 120px;
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #yes {
+      background: #ff4d88;
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 77, 136, 0.4);
+    }
+
+    #no {
+      background: #ddd;
+      position: absolute;
+      left: 55%;
+    }
+
+    #noText {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #ff3366;
+      min-height: 24px;
+    }
+
+    #message {
+      margin-top: 25px;
+      font-size: 24px;
+      color: #e6005c;
+      display: none;
+      animation: pop 0.5s ease forwards;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .typing {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #ff3366;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #ff3366;
+      width: 0;
+      display: none;
+      animation: typing 3s steps(40, end) forwards, blink 0.7s infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(0) rotate(0deg); }
+      to { transform: translateY(100vh) rotate(720deg); }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 24px; }
+      button { font-size: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 id="question">Potito, will you be my Valentine? 💘</h1>
+
+    <div class="buttons" id="buttons">
+      <button id="yes">Yes 💖</button>
+      <button id="no">No 🙈</button>
+    </div>
+
+    <div id="noText"></div>
+
+    <div id="message">YAY! You’re my Valentine 🥰💞</div>
+
+    <div id="typingNote" class="typing">
+      Let's watch movies and have a drink! 💕<br>
+      See you there! 🥂🎬 - Z
+    </div>
+  </div>
+
+  <audio id="music">
+    <source src="Song.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const noText = document.getElementById("noText");
+    const message = document.getElementById("message");
+    const typingNote = document.getElementById("typingNote");
+    const music = document.getElementById("music");
+    const question = document.getElementById("question");
+    const buttons = document.getElementById("buttons");
+
+    let noScale = 1;
+    let yesScale = 1;
+    let clicks = 0;
+
+    const noMessages = [
+      "Are you sure? 🤔",
+      "Really sure?? 😳",
+      "Think again 🙈",
+      "Please reconsider 🥺",
+      "This feels like the wrong choice 😭",
+      "NO is giving up 😌"
+    ];
+
+    noBtn.addEventListener("click", () => {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 200 - 100;
+
+      noText.textContent =
+        noMessages[Math.min(clicks, noMessages.length - 1)];
+
+      noScale -= 0.15;
+      yesScale += 0.15;
+
+      if (noScale <= 0.1) {
+        noBtn.style.display = "none";
+        noText.textContent = "NO is no longer an option 😌💖";
+      } else {
+        noBtn.style.transform =
+          `translate(${x}px, ${y}px) scale(${noScale})`;
+      }
+
+      yesBtn.style.transform = `scale(${yesScale})`;
+      clicks++;
+    });
+
+    function createConfetti() {
+      for (let i = 0; i < 80; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.backgroundColor =
+          ["#ff4d88", "#ffcc00", "#66ffcc", "#ffffff"]
+          [Math.floor(Math.random() * 4)];
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+      }
+    }
+
+    yesBtn.addEventListener("click", () => {
+      question.style.display = "none";
+      buttons.style.display = "none";
+      noText.style.display = "none";
+
+      message.style.display = "block";
+      typingNote.style.display = "inline-block";
+      music.play();
+      createConfetti();
+    });
+  </script>
+</body>
+</html>
